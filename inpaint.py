@@ -1,7 +1,6 @@
-# Original inpainting code by Davide Lasagna https://github.com/gasagna/openpiv-python/blob/master/openpiv/src/lib.pyx
+# Original inpainting code (replace_nans) by Davide Lasagna https://github.com/gasagna/openpiv-python/blob/master/openpiv/src/lib.pyx
 # Cython removed and Gaussian kernel code added by opit (https://github.com/astrolitterbox)
-# Note that the Gaussian kernel has a default standard deviation equal to 3 and is normalised to sum up to 1 to preserve flux, which means that for larger standard deviation you'd have to increase the kernel size.
-
+# Note that the Gaussian kernel has a default standard deviation equal to 3 and is normalised to sum up to 1 to preserve flux, which means that for larger standard deviation you'd have to increase the kernel size to avoid artifacts.
 
 from __future__ import division
 import numpy as np
@@ -76,7 +75,6 @@ def replace_nans(array, max_iter=50, tol=0.05, kernel_radius=2, kernel_sigma=2, 
 	# make several passes
 	# until we reach convergence
 	for it in range(max_iter):
-		print 'iteration', it
 		# for each NaN element
 		for k in range(n_nans):
 			i = inans[k]
@@ -103,7 +101,6 @@ def replace_nans(array, max_iter=50, tol=0.05, kernel_radius=2, kernel_sigma=2, 
 									# convolve kernel with original array
 									filled[i,j] = filled[i,j] + filled[i+I-kernel_radius, j+J-kernel_radius]*kernel[I, J]
 									n = n + 1*kernel[I,J]
-									print n
 
 			# divide value by effective number of added elements
 			if n != 0:
